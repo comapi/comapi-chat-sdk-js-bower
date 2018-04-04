@@ -1,0 +1,28 @@
+{
+    "name": "@comapi/sdk-js-chat",
+    "author": "Comapi",
+    "description": "Comapi Javascript SDK - Chat",
+    "version": "1.0.0",
+    "main": "./index.js",
+    "types": "./index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/comapi/comapi-chat-sdk-js.git"
+    },
+    "keywords": [
+        "messaging",
+        "chat",
+        "comapi",
+        "foundation"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/comapi/comapi-chat-sdk-js/issues"
+    },
+    "dependencies": {
+        "@comapi/sdk-js-foundation": "^1.1.0",
+        "inversify": "^4.1.1",
+        "reflect-metadata": "^0.1.10"
+    },
+    "homepage": "http://www.comapi.com"
+}

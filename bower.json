@@ -1,0 +1,24 @@
+{
+    "name": "comapi-sdk-js-chat",
+    "description": "Comapi Javascript SDK - Chat Layer",
+    "version": "1.0.0",
+    "keywords": [
+        "messaging",
+        "chat",
+        "comapi",
+        "foundation"
+    ],
+    "moduleType": [
+        "amd",
+        "globals",
+        "es6"
+    ],
+    "license": "MIT",
+    "main": "./dist/comapi-foundation.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/comapi/comapi-sdk-js-bower.git"
+    },
+    "ignore": [],
+    "dependencies": {}
+}
