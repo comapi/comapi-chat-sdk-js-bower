@@ -34,13 +34,13 @@ class MyClass{
 ### Install package from bower ...
 
 ```shell
-bower install comapi-chat-sdk-js
+bower install comapi-sdk-js-chat
 ```
 
 ### Include the script somewhere ...
 
 ```html
-<script src="bower_components/comapi-chat-sdk-js/dist/comapi-chat-client.js"></script>
+<script src="bower_components/comapi-sdk-js-chat/dist/comapi-chat-client.js"></script>
 ```
 
 There is also a minified version `comapi-chat-client.min.js` available.

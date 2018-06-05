@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var MemoryConversationStore = (function () {
     /**
      * MemoryConversationStore class constructor
+     * This implementation will store an array of conversations and an array of messages for each conversation in a separate message store.
+     * The messages will be mapped to the conversationId's as defined above.
      * @class MemoryConversationStore
      * @classdesc An in memory implementation of IConversationStore
      */
@@ -41,7 +43,7 @@ var MemoryConversationStore = (function () {
     MemoryConversationStore.prototype.createConversation = function (conversation) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            // not going to bother checking existence in reference implementation ...
+            // Check ie we have it first ...
             if (_this._indexOfConversation(conversation.id) === -1) {
                 _this.conversations.push(conversation);
                 _this.messageStore[conversation.id] = [];
@@ -53,7 +55,9 @@ var MemoryConversationStore = (function () {
         });
     };
     /**
-     * Method to update a conversation
+     * Method to update a conversation.
+     * We will find the conversation and then update the individual properties on the found object rather than replace.
+     * This is so that frameworks such as angular will correctly detect changes.
      * @method MemoryConversationStore#updateConversation
      * @param {IChatConversation} conversation - the conversation to update
      * @returns {Promise<boolean>} - Returns a boolean result via a promise
@@ -218,6 +222,7 @@ var MemoryConversationStore = (function () {
         return Promise.resolve(true);
     };
     /**
+     * Private method to find a conversation given the conversationId
      * @param conversationId
      */
     MemoryConversationStore.prototype._findConversation = function (conversationId) {
@@ -225,13 +230,14 @@ var MemoryConversationStore = (function () {
         return result.length === 1 ? result[0] : null;
     };
     /**
+     * Private method to get the index of a conversation given the conversationId
      * @param conversationId
      */
     MemoryConversationStore.prototype._indexOfConversation = function (conversationId) {
         return this.conversations.map(function (c) { return c.id; }).indexOf(conversationId);
     };
     /**
-     *
+     * Private method to find a message
      * @param conversationId
      * @param messageId
      */

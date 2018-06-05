@@ -293,7 +293,7 @@ var COMAPI_CHAT =
 	         * @method ComapiChatClient#version
 	         */
 	        get: function () {
-	            return "1.0.0.172";
+	            return "1.0.1.175";
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -307,9 +307,11 @@ var COMAPI_CHAT =
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var foundation_1 = __webpack_require__(2);
 	exports.Foundation = foundation_1.Foundation;
 	var utils_1 = __webpack_require__(5);
@@ -330,9 +332,8 @@ var COMAPI_CHAT =
 	exports.ContentData = contentData_1.ContentData;
 	var mutex_1 = __webpack_require__(60);
 	exports.Mutex = mutex_1.Mutex;
-
 	__export(__webpack_require__(3));
-
+	//# sourceMappingURL=index.js.map
 
 /***/ }),
 /* 2 */
@@ -2820,6 +2821,7 @@ var COMAPI_CHAT =
 	exports.BindingTypeEnum = literal_types_1.BindingTypeEnum;
 	exports.TargetTypeEnum = literal_types_1.TargetTypeEnum;
 	var container_module_1 = __webpack_require__(46);
+	exports.AsyncContainerModule = container_module_1.AsyncContainerModule;
 	exports.ContainerModule = container_module_1.ContainerModule;
 	var injectable_1 = __webpack_require__(47);
 	exports.injectable = injectable_1.injectable;
@@ -2881,6 +2883,41 @@ var COMAPI_CHAT =
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+	    return new (P || (P = Promise))(function (resolve, reject) {
+	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+	        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+	        step((generator = generator.apply(thisArg, _arguments || [])).next());
+	    });
+	};
+	var __generator = (this && this.__generator) || function (thisArg, body) {
+	    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+	    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+	    function verb(n) { return function (v) { return step([n, v]); }; }
+	    function step(op) {
+	        if (f) throw new TypeError("Generator is already executing.");
+	        while (_) try {
+	            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+	            if (y = 0, t) op = [0, t.value];
+	            switch (op[0]) {
+	                case 0: case 1: t = op; break;
+	                case 4: _.label++; return { value: op[1], done: false };
+	                case 5: _.label++; y = op[1]; op = [0]; continue;
+	                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+	                default:
+	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+	                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+	                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+	                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+	                    if (t[2]) _.ops.pop();
+	                    _.trys.pop(); continue;
+	            }
+	            op = body.call(thisArg, _);
+	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+	    }
+	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var binding_1 = __webpack_require__(17);
 	var ERROR_MSGS = __webpack_require__(20);
@@ -2896,33 +2933,35 @@ var COMAPI_CHAT =
 	var lookup_1 = __webpack_require__(45);
 	var Container = (function () {
 	    function Container(containerOptions) {
-	        if (containerOptions !== undefined) {
-	            if (typeof containerOptions !== "object") {
-	                throw new Error("" + ERROR_MSGS.CONTAINER_OPTIONS_MUST_BE_AN_OBJECT);
-	            }
-	            else {
-	                if (containerOptions.defaultScope !== undefined &&
-	                    containerOptions.defaultScope !== literal_types_1.BindingScopeEnum.Singleton &&
-	                    containerOptions.defaultScope !== literal_types_1.BindingScopeEnum.Transient &&
-	                    containerOptions.defaultScope !== literal_types_1.BindingScopeEnum.Request) {
-	                    throw new Error("" + ERROR_MSGS.CONTAINER_OPTIONS_INVALID_DEFAULT_SCOPE);
-	                }
-	                if (containerOptions.autoBindInjectable !== undefined &&
-	                    typeof containerOptions.autoBindInjectable !== "boolean") {
-	                    throw new Error("" + ERROR_MSGS.CONTAINER_OPTIONS_INVALID_AUTO_BIND_INJECTABLE);
-	                }
-	            }
-	            this.options = {
-	                autoBindInjectable: containerOptions.autoBindInjectable,
-	                defaultScope: containerOptions.defaultScope
-	            };
+	        var options = containerOptions || {};
+	        if (typeof options !== "object") {
+	            throw new Error("" + ERROR_MSGS.CONTAINER_OPTIONS_MUST_BE_AN_OBJECT);
 	        }
-	        else {
-	            this.options = {
-	                autoBindInjectable: false,
-	                defaultScope: literal_types_1.BindingScopeEnum.Transient
-	            };
+	        if (options.defaultScope === undefined) {
+	            options.defaultScope = literal_types_1.BindingScopeEnum.Transient;
 	        }
+	        else if (options.defaultScope !== literal_types_1.BindingScopeEnum.Singleton &&
+	            options.defaultScope !== literal_types_1.BindingScopeEnum.Transient &&
+	            options.defaultScope !== literal_types_1.BindingScopeEnum.Request) {
+	            throw new Error("" + ERROR_MSGS.CONTAINER_OPTIONS_INVALID_DEFAULT_SCOPE);
+	        }
+	        if (options.autoBindInjectable === undefined) {
+	            options.autoBindInjectable = false;
+	        }
+	        else if (typeof options.autoBindInjectable !== "boolean") {
+	            throw new Error("" + ERROR_MSGS.CONTAINER_OPTIONS_INVALID_AUTO_BIND_INJECTABLE);
+	        }
+	        if (options.skipBaseClassChecks === undefined) {
+	            options.skipBaseClassChecks = false;
+	        }
+	        else if (typeof options.skipBaseClassChecks !== "boolean") {
+	            throw new Error("" + ERROR_MSGS.CONTAINER_OPTIONS_INVALID_SKIP_BASE_CHECK);
+	        }
+	        this.options = {
+	            autoBindInjectable: options.autoBindInjectable,
+	            defaultScope: options.defaultScope,
+	            skipBaseClassChecks: options.skipBaseClassChecks
+	        };
 	        this.guid = guid_1.guid();
 	        this._bindingDictionary = new lookup_1.Lookup();
 	        this._snapshots = [];
@@ -2947,46 +2986,44 @@ var COMAPI_CHAT =
 	        return container;
 	    };
 	    Container.prototype.load = function () {
-	        var _this = this;
 	        var modules = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
 	            modules[_i] = arguments[_i];
 	        }
-	        var setModuleId = function (bindingToSyntax, moduleId) {
-	            bindingToSyntax._binding.moduleId = moduleId;
-	        };
-	        var getBindFunction = function (moduleId) {
-	            return function (serviceIdentifier) {
-	                var bindingToSyntax = _this.bind.call(_this, serviceIdentifier);
-	                setModuleId(bindingToSyntax, moduleId);
-	                return bindingToSyntax;
-	            };
-	        };
-	        var getUnbindFunction = function (moduleId) {
-	            return function (serviceIdentifier) {
-	                var _unbind = _this.unbind.bind(_this);
-	                _unbind(serviceIdentifier);
-	            };
-	        };
-	        var getIsboundFunction = function (moduleId) {
-	            return function (serviceIdentifier) {
-	                var _isBound = _this.isBound.bind(_this);
-	                return _isBound(serviceIdentifier);
-	            };
-	        };
-	        var getRebindFunction = function (moduleId) {
-	            return function (serviceIdentifier) {
-	                var bindingToSyntax = _this.rebind.call(_this, serviceIdentifier);
-	                setModuleId(bindingToSyntax, moduleId);
-	                return bindingToSyntax;
-	            };
-	        };
-	        modules.forEach(function (module) {
-	            var bindFunction = getBindFunction(module.guid);
-	            var unbindFunction = getUnbindFunction(module.guid);
-	            var isboundFunction = getIsboundFunction(module.guid);
-	            var rebindFunction = getRebindFunction(module.guid);
-	            module.registry(bindFunction, unbindFunction, isboundFunction, rebindFunction);
+	        var getHelpers = this._getContainerModuleHelpersFactory();
+	        for (var _a = 0, modules_1 = modules; _a < modules_1.length; _a++) {
+	            var currentModule = modules_1[_a];
+	            var containerModuleHelpers = getHelpers(currentModule.guid);
+	            currentModule.registry(containerModuleHelpers.bindFunction, containerModuleHelpers.unbindFunction, containerModuleHelpers.isboundFunction, containerModuleHelpers.rebindFunction);
+	        }
+	    };
+	    Container.prototype.loadAsync = function () {
+	        var modules = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            modules[_i] = arguments[_i];
+	        }
+	        return __awaiter(this, void 0, void 0, function () {
+	            var getHelpers, _a, modules_2, currentModule, containerModuleHelpers;
+	            return __generator(this, function (_b) {
+	                switch (_b.label) {
+	                    case 0:
+	                        getHelpers = this._getContainerModuleHelpersFactory();
+	                        _a = 0, modules_2 = modules;
+	                        _b.label = 1;
+	                    case 1:
+	                        if (!(_a < modules_2.length)) return [3, 4];
+	                        currentModule = modules_2[_a];
+	                        containerModuleHelpers = getHelpers(currentModule.guid);
+	                        return [4, currentModule.registry(containerModuleHelpers.bindFunction, containerModuleHelpers.unbindFunction, containerModuleHelpers.isboundFunction, containerModuleHelpers.rebindFunction)];
+	                    case 2:
+	                        _b.sent();
+	                        _b.label = 3;
+	                    case 3:
+	                        _a++;
+	                        return [3, 1];
+	                    case 4: return [2];
+	                }
+	            });
 	        });
 	    };
 	    Container.prototype.unload = function () {
@@ -3057,8 +3094,8 @@ var COMAPI_CHAT =
 	        this._bindingDictionary = snapshot.bindings;
 	        this._middleware = snapshot.middleware;
 	    };
-	    Container.prototype.createChild = function () {
-	        var child = new Container();
+	    Container.prototype.createChild = function (containerOptions) {
+	        var child = new Container(containerOptions);
 	        child.parent = this;
 	        return child;
 	    };
@@ -3096,6 +3133,46 @@ var COMAPI_CHAT =
 	        tempContainer.bind(constructorFunction).toSelf();
 	        tempContainer.parent = this;
 	        return tempContainer.get(constructorFunction);
+	    };
+	    Container.prototype._getContainerModuleHelpersFactory = function () {
+	        var _this = this;
+	        var setModuleId = function (bindingToSyntax, moduleId) {
+	            bindingToSyntax._binding.moduleId = moduleId;
+	        };
+	        var getBindFunction = function (moduleId) {
+	            return function (serviceIdentifier) {
+	                var _bind = _this.bind.bind(_this);
+	                var bindingToSyntax = _bind(serviceIdentifier);
+	                setModuleId(bindingToSyntax, moduleId);
+	                return bindingToSyntax;
+	            };
+	        };
+	        var getUnbindFunction = function (moduleId) {
+	            return function (serviceIdentifier) {
+	                var _unbind = _this.unbind.bind(_this);
+	                _unbind(serviceIdentifier);
+	            };
+	        };
+	        var getIsboundFunction = function (moduleId) {
+	            return function (serviceIdentifier) {
+	                var _isBound = _this.isBound.bind(_this);
+	                return _isBound(serviceIdentifier);
+	            };
+	        };
+	        var getRebindFunction = function (moduleId) {
+	            return function (serviceIdentifier) {
+	                var _rebind = _this.rebind.bind(_this);
+	                var bindingToSyntax = _rebind(serviceIdentifier);
+	                setModuleId(bindingToSyntax, moduleId);
+	                return bindingToSyntax;
+	            };
+	        };
+	        return function (mId) { return ({
+	            bindFunction: getBindFunction(mId),
+	            isboundFunction: getIsboundFunction(mId),
+	            rebindFunction: getRebindFunction(mId),
+	            unbindFunction: getUnbindFunction(mId)
+	        }); };
 	    };
 	    Container.prototype._get = function (avoidConstraints, isMultiInject, targetType, serviceIdentifier, key, value) {
 	        var result = null;
@@ -3254,13 +3331,21 @@ var COMAPI_CHAT =
 	    "used as service identifier";
 	exports.INVALID_DECORATOR_OPERATION = "The @inject @multiInject @tagged and @named decorators " +
 	    "must be applied to the parameters of a class constructor or a class property.";
-	exports.ARGUMENTS_LENGTH_MISMATCH_1 = "The number of constructor arguments in the derived class ";
-	exports.ARGUMENTS_LENGTH_MISMATCH_2 = " must be >= than the number of constructor arguments of its base class.";
+	exports.ARGUMENTS_LENGTH_MISMATCH = function () {
+	    var values = [];
+	    for (var _i = 0; _i < arguments.length; _i++) {
+	        values[_i] = arguments[_i];
+	    }
+	    return "The number of constructor arguments in the derived class " +
+	        (values[0] + " must be >= than the number of constructor arguments of its base class.");
+	};
 	exports.CONTAINER_OPTIONS_MUST_BE_AN_OBJECT = "Invalid Container constructor argument. Container options " +
 	    "must be an object.";
 	exports.CONTAINER_OPTIONS_INVALID_DEFAULT_SCOPE = "Invalid Container option. Default scope must " +
 	    "be a string ('singleton' or 'transient').";
 	exports.CONTAINER_OPTIONS_INVALID_AUTO_BIND_INJECTABLE = "Invalid Container option. Auto bind injectable must " +
+	    "be a boolean";
+	exports.CONTAINER_OPTIONS_INVALID_SKIP_BASE_CHECK = "Invalid Container option. Skip base check must " +
 	    "be a boolean";
 	exports.MULTIPLE_POST_CONSTRUCT_METHODS = "Cannot apply @postConstruct decorator multiple times in the same class";
 	exports.POST_CONSTRUCT_ERROR = function () {
@@ -3419,6 +3504,13 @@ var COMAPI_CHAT =
 	        }
 	        if (binding.type === literal_types_1.BindingTypeEnum.Instance && binding.implementationType !== null) {
 	            var dependencies = reflection_utils_1.getDependencies(metadataReader, binding.implementationType);
+	            if (!context.container.options.skipBaseClassChecks) {
+	                var baseClassDependencyCount = reflection_utils_1.getBaseClassDependencyCount(metadataReader, binding.implementationType);
+	                if (dependencies.length < baseClassDependencyCount) {
+	                    var error = ERROR_MSGS.ARGUMENTS_LENGTH_MISMATCH(reflection_utils_1.getFunctionName(binding.implementationType));
+	                    throw new Error(error);
+	                }
+	            }
 	            dependencies.forEach(function (dependency) {
 	                _createSubRequests(metadataReader, false, dependency.serviceIdentifier, context, subChildRequest, dependency);
 	            });
@@ -3675,6 +3767,7 @@ var COMAPI_CHAT =
 	var literal_types_1 = __webpack_require__(18);
 	var METADATA_KEY = __webpack_require__(15);
 	var serialization_1 = __webpack_require__(25);
+	exports.getFunctionName = serialization_1.getFunctionName;
 	var target_1 = __webpack_require__(32);
 	function getDependencies(metadataReader, func) {
 	    var constructorName = serialization_1.getFunctionName(func);
@@ -3696,12 +3789,6 @@ var COMAPI_CHAT =
 	    var constructorTargets = getConstructorArgsAsTargets(isBaseClass, constructorName, serviceIdentifiers, constructorArgsMetadata, iterations);
 	    var propertyTargets = getClassPropsAsTargets(metadataReader, func);
 	    var targets = constructorTargets.concat(propertyTargets);
-	    var baseClassDependencyCount = getBaseClassDependencyCount(metadataReader, func);
-	    if (targets.length < baseClassDependencyCount) {
-	        var error = ERROR_MSGS.ARGUMENTS_LENGTH_MISMATCH_1 +
-	            constructorName + ERROR_MSGS.ARGUMENTS_LENGTH_MISMATCH_2;
-	        throw new Error(error);
-	    }
 	    return targets;
 	}
 	function getConstructorArgsAsTarget(index, isBaseClass, constructorName, serviceIdentifiers, constructorArgsMetadata) {
@@ -3784,6 +3871,7 @@ var COMAPI_CHAT =
 	        return 0;
 	    }
 	}
+	exports.getBaseClassDependencyCount = getBaseClassDependencyCount;
 	function formatTargetMetadata(targetMetadata) {
 	    var targetMetadataMap = {};
 	    targetMetadata.forEach(function (m) {
@@ -4761,6 +4849,14 @@ var COMAPI_CHAT =
 	    return ContainerModule;
 	}());
 	exports.ContainerModule = ContainerModule;
+	var AsyncContainerModule = (function () {
+	    function AsyncContainerModule(registry) {
+	        this.guid = guid_1.guid();
+	        this.registry = registry;
+	    }
+	    return AsyncContainerModule;
+	}());
+	exports.AsyncContainerModule = AsyncContainerModule;
 
 
 /***/ }),
@@ -6345,16 +6441,45 @@ var COMAPI_CHAT =
 	            if (_this._sessionInfo) {
 	                _this._endAuth()
 	                    .then(function (result) {
-	                    _this._removeSession();
+	                    _this.removeSession();
 	                    resolve(true);
 	                }).catch(function (error) {
-	                    _this._removeSession();
+	                    _this.removeSession();
 	                    resolve(false);
 	                });
 	            }
 	            else {
 	                reject({ message: "No active session is present, create one before ending one" });
 	            }
+	        });
+	    };
+	    /**
+	     * Retrieves details about a session
+	     * @method SessionManager#requestSession
+	     * @returns {Promise} - Returns a promise
+	     */
+	    SessionManager.prototype.requestSession = function () {
+	        var headers = {
+	            "Content-Type": "application/json",
+	            "authorization": this.getAuthHeader(),
+	        };
+	        var url = utils_1.Utils.format(this._comapiConfig.foundationRestUrls.session, {
+	            apiSpaceId: this._comapiConfig.apiSpaceId,
+	            sessionId: this.sessionInfo.session.id,
+	            urlBase: this._comapiConfig.urlBase,
+	        });
+	        return this._restClient.get(url, headers);
+	    };
+	    /**
+	     * Internal function to remove an existing cached session
+	     * @returns {Promise} - returns boolean result
+	     */
+	    SessionManager.prototype.removeSession = function () {
+	        var _this = this;
+	        return this._localStorageData.remove("session")
+	            .then(function (result) {
+	            _this._sessionInfo = undefined;
+	            return result;
 	        });
 	    };
 	    /**
@@ -6380,7 +6505,7 @@ var COMAPI_CHAT =
 	                platform: /*browserInfo.name*/ "javascript",
 	                platformVersion: browserInfo.version,
 	                sdkType: /*"javascript"*/ "native",
-	                sdkVersion: "1.1.0.293"
+	                sdkVersion: "1.1.1.318"
 	            };
 	            return _this._restClient.post(url, {}, data);
 	        })
@@ -6431,18 +6556,6 @@ var COMAPI_CHAT =
 	        }
 	        this._sessionInfo = sessionInfo;
 	        return this._localStorageData.setObject("session", sessionInfo);
-	    };
-	    /**
-	     * Internal function to remove an existing session
-	     * @returns {boolean} - returns boolean reault
-	     */
-	    SessionManager.prototype._removeSession = function () {
-	        var _this = this;
-	        return this._localStorageData.remove("session")
-	            .then(function (result) {
-	            _this._sessionInfo = undefined;
-	            return result;
-	        });
 	    };
 	    /**
 	     *
@@ -6866,10 +6979,7 @@ var COMAPI_CHAT =
 	        this._eventManager.publishLocalEvent("WebsocketClosed", { timestamp: new Date().toISOString() });
 	        // This is the failed to connect flow ...
 	        if (this._opening.isPending) {
-	            this._opening.reject({
-	                code: event.code,
-	                message: "WebSocket closed with reason: " + event.reason + " (" + event.code + ").",
-	            });
+	            this._opening.resolve(false);
 	        }
 	        // This is the manually closed flow
 	        if (this._closing && this._closing.isPending) {
@@ -6877,7 +6987,7 @@ var COMAPI_CHAT =
 	            this.didConnect = false;
 	        }
 	        // only retry if we didn't manually close it and it actually connected in the first place
-	        if (!this.manuallyClosed && this.didConnect && !this.reconnecting) {
+	        if (!this.manuallyClosed && !this.reconnecting) {
 	            this._logger.log("socket not manually closed, reconnecting ...");
 	            this.reconnecting = true;
 	            this.reconnect();
@@ -6903,10 +7013,16 @@ var COMAPI_CHAT =
 	            _this.attempts++;
 	            _this._logger.log("reconnecting (" + _this.attempts + ") ...");
 	            _this.connect()
-	                .then(function () {
-	                _this._logger.log("socket reconnected");
-	                _this.attempts = 0;
-	                _this.reconnecting = false;
+	                .then(function (connected) {
+	                if (connected) {
+	                    _this._logger.log("socket reconnected");
+	                    _this.attempts = 0;
+	                    _this.reconnecting = false;
+	                }
+	                else {
+	                    _this._logger.log("socket recycle failed");
+	                    _this.reconnect();
+	                }
 	            })
 	                .catch(function (e) {
 	                _this._logger.log("socket recycle failed", e);
@@ -7063,7 +7179,8 @@ var COMAPI_CHAT =
 	     * @parameter {ISessionManager} _sessionManager
 	     * @parameter {IWebSocketManager} _webSocketManager
 	     */
-	    function NetworkManager(_sessionManager, _webSocketManager) {
+	    function NetworkManager(_logger, _sessionManager, _webSocketManager) {
+	        this._logger = _logger;
 	        this._sessionManager = _sessionManager;
 	        this._webSocketManager = _webSocketManager;
 	    }
@@ -7074,16 +7191,35 @@ var COMAPI_CHAT =
 	     */
 	    NetworkManager.prototype.startSession = function () {
 	        var _this = this;
+	        var _sessionInfo;
 	        return this._sessionManager.startSession()
 	            .then(function (sessionInfo) {
-	            return Promise.all([sessionInfo, _this._webSocketManager.connect()]);
+	            _sessionInfo = sessionInfo;
+	            return _this._webSocketManager.connect();
 	        })
-	            .then(function (_a) {
-	            var sessionInfo = _a[0], connected = _a[1];
-	            if (!connected) {
-	                console.error("Failed to connect web socket");
+	            .then(function (connected) {
+	            if (connected) {
+	                return _sessionInfo;
 	            }
-	            return sessionInfo;
+	            else {
+	                _this._logger.error("Failed to connect web socket");
+	                // Is the session invalid even though it hadn't expired ? 
+	                //  - perhaps the auth settings have changes since the token was issued ?
+	                return _this._sessionManager.requestSession()
+	                    .then(function (session) {
+	                    // all good, websocket connection failure was just a blip and will automatically reconnect ...
+	                    return _sessionInfo;
+	                })
+	                    .catch(function (error) {
+	                    // session was bad
+	                    _this._logger.error("failed to request session", error);
+	                    // delete old cached session and re-auth ...
+	                    return _this._sessionManager.removeSession()
+	                        .then(function (result) {
+	                        return _this._sessionManager.startSession();
+	                    });
+	                });
+	            }
 	        });
 	    };
 	    /**
@@ -7095,6 +7231,9 @@ var COMAPI_CHAT =
 	        var _this = this;
 	        return this._webSocketManager.disconnect()
 	            .then(function (succeeded) {
+	            return _this._sessionManager.removeSession();
+	        })
+	            .then(function (succeeded) {
 	            return _this._sessionManager.startSession();
 	        })
 	            .then(function (sessionInfo) {
@@ -7103,7 +7242,7 @@ var COMAPI_CHAT =
 	            .then(function (_a) {
 	            var sessionInfo = _a[0], connected = _a[1];
 	            if (!connected) {
-	                console.error("Failed to connect web socket");
+	                _this._logger.error("Failed to connect web socket");
 	            }
 	            return sessionInfo;
 	        });
@@ -7147,9 +7286,10 @@ var COMAPI_CHAT =
 	}());
 	NetworkManager = __decorate([
 	    inversify_1.injectable(),
-	    __param(0, inversify_1.inject(interfaceSymbols_1.INTERFACE_SYMBOLS.SessionManager)),
-	    __param(1, inversify_1.inject(interfaceSymbols_1.INTERFACE_SYMBOLS.WebSocketManager)),
-	    __metadata("design:paramtypes", [Object, Object])
+	    __param(0, inversify_1.inject(interfaceSymbols_1.INTERFACE_SYMBOLS.Logger)),
+	    __param(1, inversify_1.inject(interfaceSymbols_1.INTERFACE_SYMBOLS.SessionManager)),
+	    __param(2, inversify_1.inject(interfaceSymbols_1.INTERFACE_SYMBOLS.WebSocketManager)),
+	    __metadata("design:paramtypes", [Object, Object, Object])
 	], NetworkManager);
 	exports.NetworkManager = NetworkManager;
 	//# sourceMappingURL=networkManager.js.map
@@ -10794,6 +10934,8 @@ var COMAPI_CHAT =
 	var MemoryConversationStore = (function () {
 	    /**
 	     * MemoryConversationStore class constructor
+	     * This implementation will store an array of conversations and an array of messages for each conversation in a separate message store.
+	     * The messages will be mapped to the conversationId's as defined above.
 	     * @class MemoryConversationStore
 	     * @classdesc An in memory implementation of IConversationStore
 	     */
@@ -10832,7 +10974,7 @@ var COMAPI_CHAT =
 	    MemoryConversationStore.prototype.createConversation = function (conversation) {
 	        var _this = this;
 	        return new Promise(function (resolve, reject) {
-	            // not going to bother checking existence in reference implementation ...
+	            // Check ie we have it first ...
 	            if (_this._indexOfConversation(conversation.id) === -1) {
 	                _this.conversations.push(conversation);
 	                _this.messageStore[conversation.id] = [];
@@ -10844,7 +10986,9 @@ var COMAPI_CHAT =
 	        });
 	    };
 	    /**
-	     * Method to update a conversation
+	     * Method to update a conversation.
+	     * We will find the conversation and then update the individual properties on the found object rather than replace.
+	     * This is so that frameworks such as angular will correctly detect changes.
 	     * @method MemoryConversationStore#updateConversation
 	     * @param {IChatConversation} conversation - the conversation to update
 	     * @returns {Promise<boolean>} - Returns a boolean result via a promise
@@ -11009,6 +11153,7 @@ var COMAPI_CHAT =
 	        return Promise.resolve(true);
 	    };
 	    /**
+	     * Private method to find a conversation given the conversationId
 	     * @param conversationId
 	     */
 	    MemoryConversationStore.prototype._findConversation = function (conversationId) {
@@ -11016,13 +11161,14 @@ var COMAPI_CHAT =
 	        return result.length === 1 ? result[0] : null;
 	    };
 	    /**
+	     * Private method to get the index of a conversation given the conversationId
 	     * @param conversationId
 	     */
 	    MemoryConversationStore.prototype._indexOfConversation = function (conversationId) {
 	        return this.conversations.map(function (c) { return c.id; }).indexOf(conversationId);
 	    };
 	    /**
-	     *
+	     * Private method to find a message
 	     * @param conversationId
 	     * @param messageId
 	     */

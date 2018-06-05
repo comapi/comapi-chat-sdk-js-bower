@@ -4,6 +4,8 @@ export declare class MemoryConversationStore implements IConversationStore {
     private messageStore;
     /**
      * MemoryConversationStore class constructor
+     * This implementation will store an array of conversations and an array of messages for each conversation in a separate message store.
+     * The messages will be mapped to the conversationId's as defined above.
      * @class MemoryConversationStore
      * @classdesc An in memory implementation of IConversationStore
      */
@@ -28,7 +30,9 @@ export declare class MemoryConversationStore implements IConversationStore {
      */
     createConversation(conversation: IChatConversation): Promise<boolean>;
     /**
-     * Method to update a conversation
+     * Method to update a conversation.
+     * We will find the conversation and then update the individual properties on the found object rather than replace.
+     * This is so that frameworks such as angular will correctly detect changes.
      * @method MemoryConversationStore#updateConversation
      * @param {IChatConversation} conversation - the conversation to update
      * @returns {Promise<boolean>} - Returns a boolean result via a promise
@@ -88,15 +92,17 @@ export declare class MemoryConversationStore implements IConversationStore {
      */
     deleteConversationMessages(conversationId: string): Promise<boolean>;
     /**
+     * Private method to find a conversation given the conversationId
      * @param conversationId
      */
     private _findConversation(conversationId);
     /**
+     * Private method to get the index of a conversation given the conversationId
      * @param conversationId
      */
     private _indexOfConversation(conversationId);
     /**
-     *
+     * Private method to find a message
      * @param conversationId
      * @param messageId
      */
