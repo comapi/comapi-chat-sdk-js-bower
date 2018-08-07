@@ -596,7 +596,14 @@ var MessagingService = (function () {
                 .then(function (events) {
                 _events = events;
                 return sdk_js_foundation_2.Utils.eachSeries(events, function (event) {
-                    return self.applyConversationMessageEvent(event);
+                    return self.applyConversationMessageEvent(event)
+                        .then(function (result) {
+                        return true;
+                    })
+                        .catch(function (error) {
+                        self._foundation.logger.warn("Failed to apply event: " + JSON.stringify(error));
+                        return false;
+                    });
                     // result of the last operation flows int the then below...
                 }).then(function (result) {
                     // want the eventId of the last one
@@ -605,6 +612,8 @@ var MessagingService = (function () {
                 });
             })
                 .catch(function (error) {
+                // this will cause compaerFunc to return false
+                _events = undefined;
                 _this._foundation.logger.error("getConversationEvents ;-( threw this", error);
                 return conv;
             });
