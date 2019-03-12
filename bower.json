@@ -1,7 +1,7 @@
 {
     "name": "comapi-sdk-js-chat",
     "description": "Comapi Javascript SDK - Chat Layer",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "keywords": [
         "messaging",
         "chat",

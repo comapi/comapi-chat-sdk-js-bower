@@ -293,7 +293,7 @@ var COMAPI_CHAT =
 	         * @method ComapiChatClient#version
 	         */
 	        get: function () {
-	            return "1.0.2.178";
+	            return "1.0.3.180";
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -5110,11 +5110,18 @@ var COMAPI_CHAT =
 	    EventManager.prototype.unsubscribeFromLocalEvent = function (eventType, handler) {
 	        for (var i = this.eventSubscribers.length - 1; i >= 0; i--) {
 	            var subscriber = this.eventSubscribers[i];
-	            if (handler && subscriber.handler === handler && subscriber.eventType === eventType) {
-	                this.eventSubscribers.splice(i, 1);
+	            if (handler) {
+	                // looking for a single handler                
+	                if (subscriber.handler === handler && subscriber.eventType === eventType) {
+	                    this.eventSubscribers.splice(i, 1);
+	                    break;
+	                }
 	            }
-	            else if (subscriber.eventType === eventType) {
-	                this.eventSubscribers.splice(i, 1);
+	            else {
+	                // remove ANY subscribing to `eventType`
+	                if (subscriber.eventType === eventType) {
+	                    this.eventSubscribers.splice(i, 1);
+	                }
 	            }
 	        }
 	    };
@@ -6505,7 +6512,7 @@ var COMAPI_CHAT =
 	                platform: /*browserInfo.name*/ "javascript",
 	                platformVersion: browserInfo.version,
 	                sdkType: /*"javascript"*/ "native",
-	                sdkVersion: "1.1.2.319"
+	                sdkVersion: "1.1.4.322"
 	            };
 	            return _this._restClient.post(url, {}, data);
 	        })
@@ -6935,7 +6942,7 @@ var COMAPI_CHAT =
 	     * @param event
 	     */
 	    WebSocketManager.prototype._handleOpen = function (event) {
-	        console.log("_handleOpen", event);
+	        this._logger.log("_handleOpen", event);
 	        this.didConnect = true;
 	        this._eventManager.publishLocalEvent("WebsocketOpened", { timestamp: new Date().toISOString() });
 	        if (this._opening) {
@@ -6947,7 +6954,7 @@ var COMAPI_CHAT =
 	     * @param event
 	     */
 	    WebSocketManager.prototype._handleMessage = function (event) {
-	        console.log("_handleMessage", event);
+	        this._logger.log("_handleMessage", event);
 	        var message;
 	        try {
 	            message = JSON.parse(event.data);
@@ -6965,7 +6972,6 @@ var COMAPI_CHAT =
 	     * @param event
 	     */
 	    WebSocketManager.prototype._handleError = function (event) {
-	        console.log("_handleError", event);
 	        this._logger.log("websocket onerror - readystate: " + this.readystates[this.webSocket.readyState], event);
 	    };
 	    /**
@@ -6973,9 +6979,8 @@ var COMAPI_CHAT =
 	     * @param event
 	     */
 	    WebSocketManager.prototype._handleClose = function (event) {
-	        console.log("_handleClose", event);
 	        this.webSocket = undefined;
-	        this._logger.log("WebSocket Connection closed.");
+	        this._logger.log("WebSocket Connection closed.", event);
 	        this._eventManager.publishLocalEvent("WebsocketClosed", { timestamp: new Date().toISOString() });
 	        // This is the failed to connect flow ...
 	        if (this._opening.isPending) {
@@ -9730,7 +9735,9 @@ var COMAPI_CHAT =
 	                xhr.onprogress = function (evt) {
 	                    if (evt.lengthComputable) {
 	                        var percentComplete = (evt.loaded / evt.total) * 100;
-	                        console.log("onprogress: " + percentComplete + " %");
+	                        if (_this._logger) {
+	                            _this._logger.log("onprogress: " + percentComplete + " %");
+	                        }
 	                    }
 	                };
 	            });
