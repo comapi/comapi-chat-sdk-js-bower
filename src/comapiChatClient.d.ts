@@ -17,7 +17,6 @@ export declare class ComapiChatClient {
      * @class ComapiChatClient
      * @classdesc ComapiChatClient Class
      */
-    constructor();
     /**
      * Method to get session service
      * @method ComapiChatClient#session

@@ -932,9 +932,9 @@ var MessagingService = (function () {
      * @param event
      */
     MessagingService.prototype.onWebsocketOpened = function (event) {
-        console.log("onWebsocketOpened()", event);
+        this._foundation.logger.log("onWebsocketOpened()", event);
         if (this._isInitialised) {
-            console.log("syncing on WebsocketOpened event");
+            this._foundation.logger.log("syncing on WebsocketOpened event");
             return this.synchronize();
         }
         else {
@@ -946,7 +946,7 @@ var MessagingService = (function () {
      * @param event
      */
     MessagingService.prototype.onWebsocketClosed = function (event) {
-        console.log("onWebsocketClosed()", event);
+        this._foundation.logger.log("onWebsocketClosed()", event);
     };
     return MessagingService;
 }());

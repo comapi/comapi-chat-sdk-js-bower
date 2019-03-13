@@ -63,16 +63,16 @@ var COMAPI_CHAT =
 	var dbStore_1 = __webpack_require__(86);
 	exports.IndexedDBConversationStore = dbStore_1.IndexedDBConversationStore;
 	var ComapiChatClient = (function () {
-	    /**
-	     * ComapiChatClient class constructor.
-	     * @class ComapiChatClient
-	     * @classdesc ComapiChatClient Class
-	     */
 	    function ComapiChatClient() {
 	        this._eventHandlers = [];
-	        console.log("Constructing a ComapiChatClient");
 	    }
 	    Object.defineProperty(ComapiChatClient.prototype, "session", {
+	        /**
+	         * ComapiChatClient class constructor.
+	         * @class ComapiChatClient
+	         * @classdesc ComapiChatClient Class
+	         */
+	        // constructor() {}
 	        /**
 	         * Method to get session service
 	         * @method ComapiChatClient#session
@@ -293,7 +293,7 @@ var COMAPI_CHAT =
 	         * @method ComapiChatClient#version
 	         */
 	        get: function () {
-	            return "1.0.3.180";
+	            return "1.0.4.185";
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -10821,9 +10821,9 @@ var COMAPI_CHAT =
 	     * @param event
 	     */
 	    MessagingService.prototype.onWebsocketOpened = function (event) {
-	        console.log("onWebsocketOpened()", event);
+	        this._foundation.logger.log("onWebsocketOpened()", event);
 	        if (this._isInitialised) {
-	            console.log("syncing on WebsocketOpened event");
+	            this._foundation.logger.log("syncing on WebsocketOpened event");
 	            return this.synchronize();
 	        }
 	        else {
@@ -10835,7 +10835,7 @@ var COMAPI_CHAT =
 	     * @param event
 	     */
 	    MessagingService.prototype.onWebsocketClosed = function (event) {
-	        console.log("onWebsocketClosed()", event);
+	        this._foundation.logger.log("onWebsocketClosed()", event);
 	    };
 	    return MessagingService;
 	}());
