@@ -246,7 +246,7 @@ var ComapiChatClient = (function () {
          * @method ComapiChatClient#version
          */
         get: function () {
-            return "1.0.4.185";
+            return "1.0.5.188";
         },
         enumerable: true,
         configurable: true

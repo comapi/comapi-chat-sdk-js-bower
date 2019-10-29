@@ -2,7 +2,7 @@
     "name": "@comapi/sdk-js-chat",
     "author": "Comapi",
     "description": "Comapi Javascript SDK - Chat",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "main": "./src/index.js",
     "types": "./src/index.d.ts",
     "repository": {
@@ -20,7 +20,7 @@
         "url": "https://github.com/comapi/comapi-chat-sdk-js/issues"
     },
     "dependencies": {
-        "@comapi/sdk-js-foundation": "^1.1.1",
+        "@comapi/sdk-js-foundation": "^1.1.5",
         "inversify": "^4.1.1",
         "reflect-metadata": "^0.1.10"
     },

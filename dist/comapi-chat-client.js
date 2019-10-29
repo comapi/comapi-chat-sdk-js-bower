@@ -293,7 +293,7 @@ var COMAPI_CHAT =
 	         * @method ComapiChatClient#version
 	         */
 	        get: function () {
-	            return "1.0.4.185";
+	            return "1.0.5.188";
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -430,9 +430,7 @@ var COMAPI_CHAT =
 	        }
 	        var eventManager = container.getInterface(interfaceSymbols_1.INTERFACE_SYMBOLS.EventManager);
 	        var logger = container.getInterface(interfaceSymbols_1.INTERFACE_SYMBOLS.Logger);
-	        if (comapiConfig.logLevel) {
-	            logger.logLevel = comapiConfig.logLevel;
-	        }
+	        logger.logLevel = comapiConfig.logLevel in interfaces_1.LogLevels ? comapiConfig.logLevel : 0;
 	        var networkManager = container.getInterface(interfaceSymbols_1.INTERFACE_SYMBOLS.NetworkManager);
 	        var services = container.getInterface(interfaceSymbols_1.INTERFACE_SYMBOLS.Services);
 	        var device = container.getInterface(interfaceSymbols_1.INTERFACE_SYMBOLS.Device);
@@ -6512,7 +6510,7 @@ var COMAPI_CHAT =
 	                platform: /*browserInfo.name*/ "javascript",
 	                platformVersion: browserInfo.version,
 	                sdkType: /*"javascript"*/ "native",
-	                sdkVersion: "1.1.4.322"
+	                sdkVersion: "1.1.5.322"
 	            };
 	            return _this._restClient.post(url, {}, data);
 	        })
